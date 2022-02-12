@@ -4,7 +4,7 @@ const port = 5000;
 const parser= require('body-parser');
 app.use(parser.urlencoded({extended:true}));
 app.use(parser.json());
-
+app.use(express.static(path.join(__dirname, 'client/build')));
 var _id=6;
 
 var fb = [
@@ -85,15 +85,3 @@ if (process.env.NODE_ENV === 'production') {
       res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
     });
   }
-const whitelist = ['http://localhost:3000', 'http://localhost:8080', 'https://shrouded-journey-38552.heroku...']
-const corsOptions = {
-origin: function (origin, callback) {
-    console.log("** Origin of request " + origin)
-    if (whitelist.indexOf(origin) !== -1 || !origin) {
-    callback(null, true)
-    } else {
-    callback(new Error('Not allowed by CORS'))
-    }
-}
-}
-app.use(cors(corsOptions))
