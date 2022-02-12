@@ -1,12 +1,11 @@
 const express = require('express');
 const app = express();
-const favicon = use('express-favicon');
+const favicon = require('express-favicon');
 const port = 5000;
 const parser= require('body-parser');
 app.use(parser.urlencoded({extended:true}));
 app.use(parser.json());
 app.use(favicon(__dirname + '/client/public/favicon.png'));
-app.use(express.static(path.join(__dirname, 'client/build')));
 var _id=6;
 
 var fb = [
