@@ -19,5 +19,8 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express-favicon": "^2.0.1"
+  },
+  "engines":{
+    "node": "14.17.6"
   }
 }
