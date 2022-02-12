@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const favicon = require('express-favicon');
 const port = 5000;
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../client/build')));
 const parser= require('body-parser');
 app.use(parser.urlencoded({extended:true}));
 app.use(parser.json());
@@ -38,7 +40,7 @@ var fb = [
 
 
 app.get("/", (req,res)=>{
-    res.sendFile(__dirname, '/client/build/', 'index.html');
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
 })
 
 app.get('/feedback',(req,res)=>{
