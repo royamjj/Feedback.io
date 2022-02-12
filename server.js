@@ -36,6 +36,11 @@ var fb = [
     }
 ];
 
+
+app.get("/", (req,res)=>{
+    res.sendFile(__dirname, '/client/build/', 'index.html');
+})
+
 app.get('/feedback',(req,res)=>{
     res.send(fb);
 })
