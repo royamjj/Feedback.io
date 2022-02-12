@@ -78,3 +78,22 @@ app.delete("/feedback/:ID", function(req,res){
     }
     res.send(JSON.stringify(fb));
 })
+
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, 'front/build')));
+    app.get('*', function(req, res) {
+      res.sendFile(path.join(__dirname, 'front/build', 'index.html'));
+    });
+  }
+const whitelist = ['http://localhost:3000', 'http://localhost:8080', 'https://shrouded-journey-38552.heroku...']
+const corsOptions = {
+origin: function (origin, callback) {
+    console.log("** Origin of request " + origin)
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+    callback(null, true)
+    } else {
+    callback(new Error('Not allowed by CORS'))
+    }
+}
+}
+app.use(cors(corsOptions))
