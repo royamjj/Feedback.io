@@ -1,0 +1,19 @@
+{
+  "name": "feedback",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "royam",
+  "license": "ISC",
+  "devDependencies": {
+    "body-parser": "^1.19.1",
+    "express": "^4.17.2",
+    "nodemon": "^2.0.15"
+  },
+  "description": ""
+}
