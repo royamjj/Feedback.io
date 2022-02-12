@@ -3,7 +3,7 @@ const app = express();
 const favicon = require('express-favicon');
 const port = 5000;
 const path = require('path');
-app.use(express.static(path.join(__dirname, '../client/build')));
+app.use(express.static(path.join(__dirname, '/client/build/')));
 const parser= require('body-parser');
 app.use(parser.urlencoded({extended:true}));
 app.use(parser.json());
@@ -40,7 +40,7 @@ var fb = [
 
 
 app.get("/", (req,res)=>{
-    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    res.sendFile(path.join(__dirname, '/client/build/index.html'));
 })
 
 app.get('/feedback',(req,res)=>{
@@ -75,6 +75,9 @@ app.put("/feedback/:ID", function(req,res){
     res.send(JSON.stringify(fb));
 })
 
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '/client/build/index.html'));
+  });
 
 app.delete("/feedback/:ID", function(req,res){
     var ID = Number(req.params.ID)
@@ -86,10 +89,3 @@ app.delete("/feedback/:ID", function(req,res){
     }
     res.send(JSON.stringify(fb));
 })
-
-// if (process.env.NODE_ENV === 'production') {
-//     app.use(express.static(path.join(__dirname, 'client/build')));
-//     app.get('*', function(req, res) {
-//       res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-//     });
-//   }
