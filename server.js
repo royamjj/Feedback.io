@@ -1,91 +1,83 @@
 const express = require('express');
 const app = express();
 const favicon = require('express-favicon');
-const port = 5000;
-const path = require('path');
-app.use(express.static(path.join(__dirname, '/client/build/')));
 const parser= require('body-parser');
+const path = require('path');
+const mongoose = require('mongoose');
+const FbModel = require('./FbModel');
+const url = "mongodb+srv://feedbacks:royam1234@feedbacks.7ugfh.mongodb.net/feedbacksDB?retryWrites=true&w=majority";
+
+mongoose.connect(url, ()=>{console.log("connected")}, (e)=> {
+    console.log(e)
+});
+
+const port = 5000;
+
+
+app.use(express.static(path.join(__dirname, '/client/build/')));
 app.use(parser.urlencoded({extended:true}));
 app.use(parser.json());
 app.use(favicon(__dirname + '/client/public/favicon.ico'));
-var _id=6;
 
-var fb = [
-    {
-        id:1,
-        rating:6,
-        review:"Lorem ipsum dolor sit amet"
-    },
-    {
-        id:2,
-        rating:4,
-        review:"Consectetur adipisicing elit."
-    },
-    {
-        id:3,
-        rating:8,
-        review:"Atque, alias veritatis."
-    },
-    {
-        id:4,
-        rating:10,
-        review:"Veritatis nemo, sit consequuntur quidem enim pariatur illo"
-    },
-    {
-        id:5,
-        rating:1,
-        review:"Fuga, sapiente minima."
+async function run(){
+    try{
+        return FbModel.find().sort({"_id":-1}).then(data => {return data});
+
+    }catch(e){
+        console.log(e);
     }
-];
+}
+
+
+app.listen(process.env.PORT || port, ()=>{
+    console.log("HTHT");
+})
 
 
 app.get("/", (req,res)=>{
     res.sendFile(path.join(__dirname, '/client/build/index.html'));
 })
 
-app.get('/feedback',(req,res)=>{
-    res.send(fb);
+app.get('/feedback',async (req,res)=>{
+    const fbs = await run();    //await inportant!!!
+    res.send(JSON.stringify(fbs));
 })
 
-app.listen(process.env.PORT || port, ()=>{
-    console.log("HTHT");
-})
-
-app.post("/feedback", function(req,res){
+app.post("/feedback", async function(req,res){
     const newFb = {
-        id: _id,
         review:req.body.review,
         rating:req.body.rating
-    }
-    _id+=1;
-    fb.push(newFb);
-    res.send(JSON.stringify(newFb));
+    };
+
+    FbModel.create(newFb).then(data => {res.send(JSON.stringify(data))});
+    
 })
 
-app.put("/feedback/:ID", function(req,res){
-    var ID = Number(req.params.ID)
-    const newFb = req.body;
-    for(let x in fb){
-        if(fb[x].id===ID){
-            fb[x].review=newFb.review;
-            fb[x].rating=newFb.rating;
-            break;
-        }
+app.put("/feedback/:ID", async function(req,res){
+    var ID = req.params.ID
+    const filter = {
+        _id:mongoose.Types.ObjectId(ID),
     }
-    res.send(JSON.stringify(fb));
+    const updateTo = {
+        review: req.body.review,
+        rating: req.body.rating,
+    }
+    FbModel.findOneAndUpdate(filter, updateTo).then();
+    const fbs = await run();
+    res.send(JSON.stringify(fbs));
+
+})
+
+app.delete("/feedback/:ID", async function(req,res){
+    var ID = req.params.ID
+    const filter = {
+        _id:mongoose.Types.ObjectId(ID),
+    }
+    FbModel.deleteOne(filter).then()
+    const fbs = await run();
+    res.send(JSON.stringify(fbs));
 })
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '/client/build/index.html'));
-  });
-
-app.delete("/feedback/:ID", function(req,res){
-    var ID = Number(req.params.ID)
-    for(let x in fb){
-        if(fb[x].id===ID){
-            fb.splice(x,1);
-            break;
-        }
-    }
-    res.send(JSON.stringify(fb));
-})
+});

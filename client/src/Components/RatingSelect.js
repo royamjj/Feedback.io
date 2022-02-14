@@ -11,7 +11,7 @@ function RatingSelect({select}){
 
     useEffect(()=>{
         if(feedbackEdit.edit){
-            setSelected(feedbackEdit.x.rating);
+            setSelected(feedbackEdit.item.rating);
         }
     },[feedbackEdit]);
 

@@ -13,9 +13,9 @@ function FeedbackItem(){
         );
     }
     return isLoading ? <Loading/> : feedbacks.map(x => ( 
-        <div className="feedbackItem" key={x.id}>
+        <div className="feedbackItem" key={x._id}>
             <div className="feedbackItem-rating">{x.rating}</div>
-            <button className='close-btn' onClick={() => deleteFeedback(x.id)}><FaTimes color='#ff6e97'/></button>
+            <button className='close-btn' onClick={() => deleteFeedback(x._id)}><FaTimes color='#ff6e97'/></button>
             <button className='edit-btn' onClick={() => EditHandler(x)}><FaEdit color='#ff6a95'/></button>
             <div className="feedbackItem-text">{x.review}</div>
         </div>

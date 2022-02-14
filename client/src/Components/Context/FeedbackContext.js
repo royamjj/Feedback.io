@@ -27,14 +27,15 @@ export const FeedbackProvider=({children})=>{
 
 
     function EditHandler(x){
+        console.log(x)
         setFeedbackEdit({
-            x,
+            item:x,
             edit:true,
         });
     }
 
     const deleteFeedback = async (_id) => {
-        const response = await fetch(`/feedback/${String(_id)}`, {method: "DELETE"});
+        const response = await fetch(`/feedback/${_id}`, {method: "DELETE"});
         const data = await response.json();
         setFeedbacks(data);
     }
@@ -49,11 +50,12 @@ export const FeedbackProvider=({children})=>{
             body: JSON.stringify(fb),
         });
         const data = await response.json();
-        setFeedbacks([data,...feedbacks]);
+        setFeedbacks([...feedbacks,data]);
 
     }
 
     const updateFeedback = async (ID,fb)=>{
+        console.log(ID)
         const response = await fetch(`/feedback/${ID}`, {
             method: "PUT",
             headers:{
@@ -62,7 +64,6 @@ export const FeedbackProvider=({children})=>{
             body: JSON.stringify(fb)
         })
         const data = await response.json();
-        console.log(data);
         setFeedbacks(data);
 
     }

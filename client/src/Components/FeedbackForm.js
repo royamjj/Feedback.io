@@ -15,8 +15,8 @@ function FeedbackForm(){
 
     useEffect(() => {
         if(feedbackEdit.edit){
-            setReview(feedbackEdit.x.review);
-            setRating(feedbackEdit.x.rating);
+            setReview(feedbackEdit.item.review);
+            setRating(feedbackEdit.item.rating);
             setBtn(1);
         }
         
@@ -48,7 +48,7 @@ function FeedbackForm(){
                 rating:rating,
             }
             if(feedbackEdit.edit){
-                updateFeedback(feedbackEdit.x.id,newFeedback);
+                updateFeedback(feedbackEdit.item._id,newFeedback);
                 feedbackEdit.edit = false;
             }
             else{
